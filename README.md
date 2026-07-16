@@ -11,7 +11,7 @@
 
 ## What It Does
 
-A Tetris game that you play by tilting and shaking the hardware. If you shake the board, the speed will go up and if you tilt it you can move the blocks
+A Tetris game that you play by tilting the hardware. If you tilt it you can move the blocks left or right.
 
 NOTE: The project says "ESP32" but I hit Ctrl+Z and it deleted everything, then I realised the stuff in the Arduino kit might be a better fit anyways. So can I please get an Arduino kit?
 
