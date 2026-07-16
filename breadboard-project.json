@@ -1,0 +1,1101 @@
+{
+  "format": "velxio-project",
+  "version": 1,
+  "boards": [
+    {
+      "id": "arduino-uno",
+      "boardKind": "arduino-uno",
+      "x": -263.6460242966574,
+      "y": -110.61730950670636,
+      "activeFileGroupId": "group-arduino-uno",
+      "languageMode": "arduino",
+      "serialBaudRate": 0
+    }
+  ],
+  "fileGroups": {
+    "group-arduino-uno": [
+      {
+        "name": "sketch.ino",
+        "content": "#include <Wire.h>\n#include <LiquidCrystal_I2C.h>\n\nconst int C1 = A3;\nconst int C2 = 4;\nconst int C3 = 5;\nconst int C4 = 11;\nconst int C5 = 7;\nconst int C6 = 12;\nconst int C7 = A1;\nconst int C8 = A0;\n\nconst int R1 = 10;\nconst int R2 = A2;\nconst int R3 = 9;\nconst int R4 = 13;\nconst int R5 = 0;\nconst int R6 = 8;\nconst int R7 = 1;\nconst int R8 = 6;\n\nconst int BUTTON_PIN = 2;\nconst int TILT_SWITCH = 3;\nLiquidCrystal_I2C lcd(0x27, 16, 2);\n\nint vibrationOutput;\nbool gameStarted = false;\nint lastButtonReading = HIGH; \nunsigned long lastDebounceTime = 0;\nconst unsigned long debounceDelay = 50;\n\nvoid clearBoard() {\n  // turns all the LEDs off at the start of the game  \n  digitalWrite(R1,HIGH);\n  digitalWrite(R2,HIGH);  \n  digitalWrite(R3,HIGH);\n  digitalWrite(R4,HIGH);\n  digitalWrite(R5,HIGH);\n  digitalWrite(R6,HIGH);\n  digitalWrite(R7,HIGH);\n  digitalWrite(R8,HIGH);\n  digitalWrite(C1,LOW);\n  digitalWrite(C2,LOW);\n  digitalWrite(C3,LOW); \n  digitalWrite(C4,LOW);\n  digitalWrite(C5,LOW);\n  digitalWrite(C6,LOW);\n  digitalWrite(C7,LOW);\n  digitalWrite(C8,LOW);\n}\n\nvoid setup() {\n  Wire.begin();\n\n  pinMode(R1, OUTPUT);\n  pinMode(R2, OUTPUT);\n  pinMode(R3,  OUTPUT);  \n  pinMode(R4, OUTPUT);  \n  pinMode(R5, OUTPUT); \n  pinMode(R6,  OUTPUT);\n  pinMode(R7, OUTPUT);  \n  pinMode(R8, OUTPUT);\n  pinMode(C1,  OUTPUT);\n  pinMode(C2, OUTPUT); \n  pinMode(C3, OUTPUT);\n  pinMode(C4,  OUTPUT);\n  pinMode(C5, OUTPUT);\n  pinMode(C6, OUTPUT);\n  pinMode(C7,  OUTPUT);\n  pinMode(C8, OUTPUT);\n\n  pinMode(TILT_SWITCH, INPUT);\n  pinMode(BUTTON_PIN, INPUT_PULLUP);\n\n  lcd.init();\n  lcd.backlight();\n  lcd.setCursor(0, 0);\n  lcd.print(\"Press button to\");\n  lcd.setCursor(0, 1);\n  lcd.print(\"start game!\");\n\n  //clearBoard();\n}\n\nvoid selectRow(int row) {\n  if (row==1)  digitalWrite(R1,LOW); else digitalWrite(R1,HIGH);\n  if (row==2) digitalWrite(R2,LOW);  else digitalWrite(R2,HIGH);\n  if (row==3) digitalWrite(R3,LOW); else digitalWrite(R3,HIGH);\n  if (row==4) digitalWrite(R4,LOW); else digitalWrite(R4,HIGH);\n  if (row==5)  digitalWrite(R5,LOW); else digitalWrite(R5,HIGH);\n  if (row==6) digitalWrite(R6,LOW);  else digitalWrite(R6,HIGH);\n  if (row==7) digitalWrite(R7,LOW); else digitalWrite(R7,HIGH);\n  if (row==8) digitalWrite(R8,LOW); else digitalWrite(R8,HIGH);\n}\n\nvoid  selectColumn(int column) {\n  if (column==1) digitalWrite(C1,HIGH); else digitalWrite(C1,LOW);\n  if (column==2) digitalWrite(C2,HIGH); else digitalWrite(C2,LOW);\n  if (column==3)  digitalWrite(C3,HIGH); else digitalWrite(C3,LOW);\n  if (column==4) digitalWrite(C4,HIGH);  else digitalWrite(C4,LOW);\n  if (column==5) digitalWrite(C5,HIGH); else digitalWrite(C5,LOW);\n  if (column==6) digitalWrite(C6,HIGH); else digitalWrite(C6,LOW);\n  if (column==7)  digitalWrite(C7,HIGH); else digitalWrite(C7,LOW);  \n  if (column==8) digitalWrite(C8,HIGH);  else digitalWrite(C8,LOW);\n}\n\nvoid loop() {\n  vibrationOutput = digitalRead(TILT_SWITCH);\n\n  if (vibrationOutput < 1022) {\n  // I believe the sensor is lower than 1022 if the switch isn't tilting, but it's broken in the editor so there's no way to check\n  }\n\n  else {\n    // tilting logic\n  }\n\n  delay(100);\n\n  int buttonReading = digitalRead(BUTTON_PIN);\n\n  if (buttonReading != lastButtonReading) {\n    lastDebounceTime = millis();   // input changed, reset timer\n  }\n\n  if ((millis() - lastDebounceTime) > debounceDelay) {\n    static int buttonState = HIGH;\n    if (buttonReading != buttonState) {\n      buttonState = buttonReading;\n      if (buttonState == LOW) {   // a press pulls the pin LOW\n        gameStarted = true;\n      }\n    }\n  }\n  lastButtonReading = buttonReading;\n\n  if (gameStarted == true) {\n    lcd.clear();\n    lcd.setCursor(0, 0);\n    lcd.print(\"Score: 0\");\n    lcd.setCursor(0, 1);\n    lcd.print(\"High Score: 0\");\n\n    for (int i=1;i<9;i++)  {\n      for (int j=1;j<9;j++) {\n        clearBoard();\n        selectRow(i);\n        selectColumn(j);  \n        delay(100);\n      }\n    }\n  }\n}"
+      }
+    ]
+  },
+  "components": [
+    {
+      "id": "breadboard_full_1783424629326_lbtkrc0cb",
+      "metadataId": "breadboard-full",
+      "x": -1047.962534730003,
+      "y": -85.79046824691989,
+      "properties": {
+        "state": false,
+        "value": false
+      }
+    },
+    {
+      "id": "dot_matrix_8x8_1784028458950_dhwylm5gv",
+      "metadataId": "dot-matrix-8x8",
+      "x": -747.7625347300029,
+      "y": -24.790468246919882,
+      "properties": {},
+      "attachedTo": {
+        "breadboardId": "breadboard_full_1783424629326_lbtkrc0cb",
+        "pinMap": {
+          "1": "B31",
+          "2": "B32",
+          "3": "B33",
+          "4": "B34",
+          "5": "B35",
+          "6": "B36",
+          "7": "B37",
+          "8": "B38",
+          "9": "I38",
+          "10": "I37",
+          "11": "I36",
+          "12": "I35",
+          "13": "I34",
+          "14": "I33",
+          "15": "I32",
+          "16": "I31"
+        }
+      }
+    },
+    {
+      "id": "lcd1602_1784029853989_fmss4tqfo",
+      "metadataId": "lcd1602",
+      "x": -458.9596572923877,
+      "y": 208.42051014292673,
+      "properties": {
+        "color": "white",
+        "background": "blue",
+        "characters": {
+          "0": 0,
+          "1": 0,
+          "2": 0,
+          "3": 0,
+          "4": 0,
+          "5": 0,
+          "6": 0,
+          "7": 0,
+          "8": 0,
+          "9": 0,
+          "10": 0,
+          "11": 0,
+          "12": 0,
+          "13": 0,
+          "14": 0,
+          "15": 0,
+          "16": 0,
+          "17": 0,
+          "18": 0,
+          "19": 0,
+          "20": 0,
+          "21": 0,
+          "22": 0,
+          "23": 0,
+          "24": 0,
+          "25": 0,
+          "26": 0,
+          "27": 0,
+          "28": 0,
+          "29": 0,
+          "30": 0,
+          "31": 0
+        },
+        "cursor": false,
+        "blink": false,
+        "cursorX": 0,
+        "cursorY": 0,
+        "backlight": true,
+        "pins": "full",
+        "screenOnly": false
+      }
+    },
+    {
+      "id": "lcd1602_i2c_1784030010526_nvqoiy5as",
+      "metadataId": "lcd1602-i2c",
+      "x": -440.4001094788319,
+      "y": 128.71739256429117,
+      "properties": {
+        "i2cAddress": "0x27",
+        "contrast": 50,
+        "rotation": 0
+      }
+    },
+    {
+      "id": "pushbutton_1784034973276_mcran2n9s",
+      "metadataId": "pushbutton",
+      "x": -629.162534730003,
+      "y": 7.209531753080114,
+      "properties": {
+        "color": "red",
+        "pressed": false,
+        "label": "",
+        "xray": false,
+        "rotation": 0
+      },
+      "attachedTo": {
+        "breadboardId": "breadboard_full_1783424629326_lbtkrc0cb",
+        "pinMap": {
+          "2.l": "F42",
+          "2.r": "F49"
+        }
+      }
+    },
+    {
+      "id": "tilt_switch_1784108841184_8a7n50k3p",
+      "metadataId": "tilt-switch",
+      "x": -507.16253473000296,
+      "y": -48.790468246919886,
+      "properties": {
+        "rotation": 90
+      },
+      "attachedTo": {
+        "breadboardId": "breadboard_full_1783424629326_lbtkrc0cb",
+        "pinMap": {
+          "GND": "F62",
+          "VCC": "F61",
+          "OUT": "F60"
+        }
+      }
+    }
+  ],
+  "wires": [
+    {
+      "waypoints": [],
+      "id": "wire-1783606003829",
+      "start": {
+        "componentId": "breadboard_full_1783424629326_lbtkrc0cb",
+        "pinName": "BP61",
+        "x": -440.962534730003,
+        "y": 108.20953175308011
+      },
+      "end": {
+        "componentId": "breadboard_full_1783424629326_lbtkrc0cb",
+        "pinName": "J61",
+        "x": -440.962534730003,
+        "y": 85.20953175308011
+      },
+      "color": "#cc0000"
+    },
+    {
+      "waypoints": [],
+      "id": "wire-1783606024818",
+      "start": {
+        "componentId": "breadboard_full_1783424629326_lbtkrc0cb",
+        "pinName": "BN62",
+        "x": -431.36253473000295,
+        "y": 121.20953175308011
+      },
+      "end": {
+        "componentId": "breadboard_full_1783424629326_lbtkrc0cb",
+        "pinName": "J62",
+        "x": -431.36253473000295,
+        "y": 85.20953175308011
+      },
+      "color": "#000000"
+    },
+    {
+      "waypoints": [
+        {
+          "x": -82.93730149561397,
+          "y": 122.24659849809156
+        }
+      ],
+      "id": "wire-1784029034132",
+      "start": {
+        "componentId": "arduino-uno",
+        "pinName": "GND.3",
+        "x": -84.6460242966574,
+        "y": 80.88269049329364
+      },
+      "end": {
+        "componentId": "breadboard_full_1783424629326_lbtkrc0cb",
+        "pinName": "BN63",
+        "x": -421.76253473000304,
+        "y": 121.20953175308011
+      },
+      "color": "#000000"
+    },
+    {
+      "waypoints": [
+        {
+          "x": -103.39872480344522,
+          "y": 106.55792392703387
+        },
+        {
+          "x": -349.86425056773317,
+          "y": 80.7334111171728
+        }
+      ],
+      "id": "wire-1784029141492",
+      "start": {
+        "componentId": "arduino-uno",
+        "pinName": "5V",
+        "x": -103.6460242966574,
+        "y": 80.88269049329364
+      },
+      "end": {
+        "componentId": "breadboard_full_1783424629326_lbtkrc0cb",
+        "pinName": "BP63",
+        "x": -421.76253473000304,
+        "y": 108.20953175308011
+      },
+      "color": "#cc0000"
+    },
+    {
+      "waypoints": [
+        {
+          "x": -91.81228226050587,
+          "y": 140.03158027591394
+        },
+        {
+          "x": 41.87641457038007,
+          "y": 132.3372667892442
+        },
+        {
+          "x": 28.41136596870809,
+          "y": -139.84907280169648
+        },
+        {
+          "x": -306.2912707014239,
+          "y": -74.44740816500402
+        }
+      ],
+      "id": "wire-1784029162536",
+      "start": {
+        "componentId": "arduino-uno",
+        "pinName": "GND.2",
+        "x": -94.1460242966574,
+        "y": 80.88269049329364
+      },
+      "end": {
+        "componentId": "breadboard_full_1783424629326_lbtkrc0cb",
+        "pinName": "TN63",
+        "x": -421.76253473000304,
+        "y": -49.790468246919886
+      },
+      "color": "#000000"
+    },
+    {
+      "waypoints": [
+        {
+          "x": -114.43049850222162,
+          "y": 169.01253519167966
+        },
+        {
+          "x": 62.6412686957663,
+          "y": 155.18062048913328
+        },
+        {
+          "x": 59.5517896104585,
+          "y": -157.2018247222967
+        }
+      ],
+      "id": "wire-1784029184497",
+      "start": {
+        "componentId": "arduino-uno",
+        "pinName": "3.3V",
+        "x": -113.6460242966574,
+        "y": 80.88269049329364
+      },
+      "end": {
+        "componentId": "breadboard_full_1783424629326_lbtkrc0cb",
+        "pinName": "TP63",
+        "x": -421.76253473000304,
+        "y": -62.790468246919886
+      },
+      "color": "#cc0000"
+    },
+    {
+      "waypoints": [],
+      "id": "wire-1784031285003",
+      "start": {
+        "componentId": "lcd1602_1784029853989_fmss4tqfo",
+        "pinName": "VSS",
+        "x": -420.9596572923877,
+        "y": 345.3905101429267
+      },
+      "end": {
+        "componentId": "lcd1602_i2c_1784030010526_nvqoiy5as",
+        "pinName": "VSS",
+        "x": -426.80010947883187,
+        "y": 207.71739256429117
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [],
+      "id": "wire-1784031292657",
+      "start": {
+        "componentId": "lcd1602_1784029853989_fmss4tqfo",
+        "pinName": "VDD",
+        "x": -411.4596572923877,
+        "y": 345.3905101429267
+      },
+      "end": {
+        "componentId": "lcd1602_i2c_1784030010526_nvqoiy5as",
+        "pinName": "VDD",
+        "x": -419.30010947883187,
+        "y": 207.71739256429117
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [],
+      "id": "wire-1784031296118",
+      "start": {
+        "componentId": "lcd1602_1784029853989_fmss4tqfo",
+        "pinName": "V0",
+        "x": -401.4596572923877,
+        "y": 345.3905101429267
+      },
+      "end": {
+        "componentId": "lcd1602_i2c_1784030010526_nvqoiy5as",
+        "pinName": "V0",
+        "x": -411.80010947883187,
+        "y": 207.71739256429117
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [],
+      "id": "wire-1784031299457",
+      "start": {
+        "componentId": "lcd1602_1784029853989_fmss4tqfo",
+        "pinName": "RS",
+        "x": -392.4596572923877,
+        "y": 345.3905101429267
+      },
+      "end": {
+        "componentId": "lcd1602_i2c_1784030010526_nvqoiy5as",
+        "pinName": "RS",
+        "x": -404.30010947883187,
+        "y": 207.71739256429117
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [],
+      "id": "wire-1784031306801",
+      "start": {
+        "componentId": "lcd1602_1784029853989_fmss4tqfo",
+        "pinName": "RW",
+        "x": -382.4596572923877,
+        "y": 345.3905101429267
+      },
+      "end": {
+        "componentId": "lcd1602_i2c_1784030010526_nvqoiy5as",
+        "pinName": "RW",
+        "x": -396.80010947883187,
+        "y": 207.71739256429117
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [],
+      "id": "wire-1784031311262",
+      "start": {
+        "componentId": "lcd1602_1784029853989_fmss4tqfo",
+        "pinName": "E",
+        "x": -372.9596572923877,
+        "y": 345.3905101429267
+      },
+      "end": {
+        "componentId": "lcd1602_i2c_1784030010526_nvqoiy5as",
+        "pinName": "E",
+        "x": -389.30010947883187,
+        "y": 207.71739256429117
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [],
+      "id": "wire-1784031314389",
+      "start": {
+        "componentId": "lcd1602_1784029853989_fmss4tqfo",
+        "pinName": "D0",
+        "x": -363.4596572923877,
+        "y": 345.3905101429267
+      },
+      "end": {
+        "componentId": "lcd1602_i2c_1784030010526_nvqoiy5as",
+        "pinName": "D0",
+        "x": -381.80010947883187,
+        "y": 207.71739256429117
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [],
+      "id": "wire-1784031317881",
+      "start": {
+        "componentId": "lcd1602_1784029853989_fmss4tqfo",
+        "pinName": "D1",
+        "x": -353.4596572923877,
+        "y": 345.3905101429267
+      },
+      "end": {
+        "componentId": "lcd1602_i2c_1784030010526_nvqoiy5as",
+        "pinName": "D1",
+        "x": -374.30010947883187,
+        "y": 207.71739256429117
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [],
+      "id": "wire-1784031322073",
+      "start": {
+        "componentId": "lcd1602_1784029853989_fmss4tqfo",
+        "pinName": "D2",
+        "x": -343.9596572923877,
+        "y": 345.3905101429267
+      },
+      "end": {
+        "componentId": "lcd1602_i2c_1784030010526_nvqoiy5as",
+        "pinName": "D2",
+        "x": -366.8001094788319,
+        "y": 207.71739256429117
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [],
+      "id": "wire-1784031325634",
+      "start": {
+        "componentId": "lcd1602_1784029853989_fmss4tqfo",
+        "pinName": "D3",
+        "x": -334.4596572923877,
+        "y": 345.3905101429267
+      },
+      "end": {
+        "componentId": "lcd1602_i2c_1784030010526_nvqoiy5as",
+        "pinName": "D3",
+        "x": -359.3001094788319,
+        "y": 207.71739256429117
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [],
+      "id": "wire-1784031330037",
+      "start": {
+        "componentId": "lcd1602_1784029853989_fmss4tqfo",
+        "pinName": "D4",
+        "x": -324.9596572923877,
+        "y": 345.3905101429267
+      },
+      "end": {
+        "componentId": "lcd1602_i2c_1784030010526_nvqoiy5as",
+        "pinName": "D4",
+        "x": -351.8001094788319,
+        "y": 207.71739256429117
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [],
+      "id": "wire-1784031333658",
+      "start": {
+        "componentId": "lcd1602_1784029853989_fmss4tqfo",
+        "pinName": "D5",
+        "x": -315.4596572923877,
+        "y": 345.3905101429267
+      },
+      "end": {
+        "componentId": "lcd1602_i2c_1784030010526_nvqoiy5as",
+        "pinName": "D5",
+        "x": -344.3001094788319,
+        "y": 207.71739256429117
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [],
+      "id": "wire-1784031339708",
+      "start": {
+        "componentId": "lcd1602_1784029853989_fmss4tqfo",
+        "pinName": "D6",
+        "x": -305.9596572923877,
+        "y": 345.3905101429267
+      },
+      "end": {
+        "componentId": "lcd1602_i2c_1784030010526_nvqoiy5as",
+        "pinName": "D6",
+        "x": -336.8001094788319,
+        "y": 207.71739256429117
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [],
+      "id": "wire-1784031343039",
+      "start": {
+        "componentId": "lcd1602_1784029853989_fmss4tqfo",
+        "pinName": "D7",
+        "x": -296.4596572923877,
+        "y": 345.3905101429267
+      },
+      "end": {
+        "componentId": "lcd1602_i2c_1784030010526_nvqoiy5as",
+        "pinName": "D7",
+        "x": -329.3001094788319,
+        "y": 207.71739256429117
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [],
+      "id": "wire-1784031346966",
+      "start": {
+        "componentId": "lcd1602_1784029853989_fmss4tqfo",
+        "pinName": "A",
+        "x": -286.4596572923877,
+        "y": 345.3905101429267
+      },
+      "end": {
+        "componentId": "lcd1602_i2c_1784030010526_nvqoiy5as",
+        "pinName": "A",
+        "x": -321.8001094788319,
+        "y": 207.71739256429117
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [],
+      "id": "wire-1784031349859",
+      "start": {
+        "componentId": "lcd1602_1784029853989_fmss4tqfo",
+        "pinName": "K",
+        "x": -276.9596572923877,
+        "y": 345.3905101429267
+      },
+      "end": {
+        "componentId": "lcd1602_i2c_1784030010526_nvqoiy5as",
+        "pinName": "K",
+        "x": -314.3001094788319,
+        "y": 207.71739256429117
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [],
+      "id": "wire-1784031363014",
+      "start": {
+        "componentId": "lcd1602_i2c_1784030010526_nvqoiy5as",
+        "pinName": "GND",
+        "x": -423.4001094788319,
+        "y": 137.71739256429117
+      },
+      "end": {
+        "componentId": "breadboard_full_1783424629326_lbtkrc0cb",
+        "pinName": "BN59",
+        "x": -460.162534730003,
+        "y": 121.20953175308011
+      },
+      "color": "#000000"
+    },
+    {
+      "waypoints": [],
+      "id": "wire-1784031375724",
+      "start": {
+        "componentId": "lcd1602_i2c_1784030010526_nvqoiy5as",
+        "pinName": "VCC",
+        "x": -416.4001094788319,
+        "y": 137.71739256429117
+      },
+      "end": {
+        "componentId": "breadboard_full_1783424629326_lbtkrc0cb",
+        "pinName": "BP58",
+        "x": -469.76253473000304,
+        "y": 108.20953175308011
+      },
+      "color": "#cc0000"
+    },
+    {
+      "waypoints": [
+        {
+          "x": -409.4100693553522,
+          "y": 126.50984716910253
+        }
+      ],
+      "id": "wire-1784031482757",
+      "start": {
+        "componentId": "lcd1602_i2c_1784030010526_nvqoiy5as",
+        "pinName": "SDA",
+        "x": -409.4001094788319,
+        "y": 137.71739256429117
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "A4",
+        "x": -17.6460242966574,
+        "y": 80.88269049329364
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [],
+      "id": "wire-1784031491064",
+      "start": {
+        "componentId": "lcd1602_i2c_1784030010526_nvqoiy5as",
+        "pinName": "SCL",
+        "x": -402.4001094788319,
+        "y": 137.71739256429117
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "A5",
+        "x": -8.146024296657401,
+        "y": 80.88269049329364
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [],
+      "id": "wire-1784105378342",
+      "start": {
+        "componentId": "breadboard_full_1783424629326_lbtkrc0cb",
+        "pinName": "BN49",
+        "x": -556.162534730003,
+        "y": 121.20953175308011
+      },
+      "end": {
+        "componentId": "breadboard_full_1783424629326_lbtkrc0cb",
+        "pinName": "J49",
+        "x": -556.162534730003,
+        "y": 85.20953175308011
+      },
+      "color": "#000000"
+    },
+    {
+      "waypoints": [],
+      "id": "wire-1784105571312",
+      "start": {
+        "componentId": "breadboard_full_1783424629326_lbtkrc0cb",
+        "pinName": "A49",
+        "x": -556.162534730003,
+        "y": -27.790468246919886
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "2",
+        "x": -27.1460242966574,
+        "y": -101.61730950670636
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [],
+      "id": "wire-1784105645203",
+      "start": {
+        "componentId": "pushbutton_1784034973276_mcran2n9s",
+        "pinName": "1.r",
+        "x": -556.162534730003,
+        "y": 26.209531753080114
+      },
+      "end": {
+        "componentId": "breadboard_full_1783424629326_lbtkrc0cb",
+        "pinName": "E49",
+        "x": -556.162534730003,
+        "y": 12.209531753080114
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [],
+      "id": "wire-1784105648507",
+      "start": {
+        "componentId": "pushbutton_1784034973276_mcran2n9s",
+        "pinName": "1.l",
+        "x": -623.162534730003,
+        "y": 26.209531753080114
+      },
+      "end": {
+        "componentId": "breadboard_full_1783424629326_lbtkrc0cb",
+        "pinName": "E42",
+        "x": -623.3625347300031,
+        "y": 12.209531753080114
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [
+        {
+          "x": -733.8166938515299,
+          "y": -129.04122363916625
+        }
+      ],
+      "id": "wire-1784107860320",
+      "start": {
+        "componentId": "dot_matrix_8x8_1784028458950_dhwylm5gv",
+        "pinName": "1",
+        "x": -731.7625347300029,
+        "y": -14.790468246919882
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "0",
+        "x": -8.146024296657401,
+        "y": -101.61730950670636
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [
+        {
+          "x": -721.9590796069623,
+          "y": -119.68220172345055
+        }
+      ],
+      "id": "wire-1784107888314",
+      "start": {
+        "componentId": "dot_matrix_8x8_1784028458950_dhwylm5gv",
+        "pinName": "2",
+        "x": -721.7625347300029,
+        "y": -14.790468246919882
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "1",
+        "x": -17.6460242966574,
+        "y": -101.61730950670636
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [
+        {
+          "x": -711.573280988962,
+          "y": -111.17819148572178
+        }
+      ],
+      "id": "wire-1784107949160",
+      "start": {
+        "componentId": "dot_matrix_8x8_1784028458950_dhwylm5gv",
+        "pinName": "3",
+        "x": -711.7625347300029,
+        "y": -14.790468246919882
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "4",
+        "x": -46.1460242966574,
+        "y": -101.61730950670636
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [
+        {
+          "x": -701.8687101588539,
+          "y": -102.56591306428764
+        }
+      ],
+      "id": "wire-1784107991575",
+      "start": {
+        "componentId": "dot_matrix_8x8_1784028458950_dhwylm5gv",
+        "pinName": "4",
+        "x": -701.7625347300029,
+        "y": -14.790468246919882
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "5",
+        "x": -55.6460242966574,
+        "y": -101.61730950670636
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [
+        {
+          "x": -691.8501364759974,
+          "y": -76.36111597356951
+        }
+      ],
+      "id": "wire-1784108041051",
+      "start": {
+        "componentId": "dot_matrix_8x8_1784028458950_dhwylm5gv",
+        "pinName": "5",
+        "x": -691.7625347300029,
+        "y": -14.790468246919882
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "6",
+        "x": -65.1460242966574,
+        "y": -101.61730950670636
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [
+        {
+          "x": -681.0001725760197,
+          "y": -70.17389199948082
+        }
+      ],
+      "id": "wire-1784108086853",
+      "start": {
+        "componentId": "dot_matrix_8x8_1784028458950_dhwylm5gv",
+        "pinName": "6",
+        "x": -681.7625347300029,
+        "y": -14.790468246919882
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "7",
+        "x": -74.6460242966574,
+        "y": -101.61730950670636
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [
+        {
+          "x": -670.449728026218,
+          "y": -56.36861944569181
+        }
+      ],
+      "id": "wire-1784108150165",
+      "start": {
+        "componentId": "dot_matrix_8x8_1784028458950_dhwylm5gv",
+        "pinName": "7",
+        "x": -671.7625347300029,
+        "y": -14.790468246919882
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "8",
+        "x": -90.6460242966574,
+        "y": -101.61730950670636
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [
+        {
+          "x": -662.0449449463783,
+          "y": -40.035794170816466
+        }
+      ],
+      "id": "wire-1784108186114",
+      "start": {
+        "componentId": "dot_matrix_8x8_1784028458950_dhwylm5gv",
+        "pinName": "8",
+        "x": -661.7625347300029,
+        "y": -14.790468246919882
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "9",
+        "x": -100.6460242966574,
+        "y": -101.61730950670636
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [],
+      "id": "wire-1784108253869",
+      "start": {
+        "componentId": "dot_matrix_8x8_1784028458950_dhwylm5gv",
+        "pinName": "9",
+        "x": -661.7625347300029,
+        "y": 75.20953175308011
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "10",
+        "x": -110.1460242966574,
+        "y": -101.61730950670636
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [],
+      "id": "wire-1784108341575",
+      "start": {
+        "componentId": "breadboard_full_1783424629326_lbtkrc0cb",
+        "pinName": "I37",
+        "x": -671.3625347300031,
+        "y": 75.20953175308011
+      },
+      "end": {
+        "componentId": "breadboard_full_1783424629326_lbtkrc0cb",
+        "pinName": "J37",
+        "x": -671.3625347300031,
+        "y": 85.20953175308011
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [],
+      "id": "wire-1784108353835",
+      "start": {
+        "componentId": "breadboard_full_1783424629326_lbtkrc0cb",
+        "pinName": "J37",
+        "x": -671.3625347300031,
+        "y": 85.20953175308011
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "11",
+        "x": -119.6460242966574,
+        "y": -101.61730950670636
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [
+        {
+          "x": -681.4446632860029,
+          "y": 95.84871201205436
+        }
+      ],
+      "id": "wire-1784108392004",
+      "start": {
+        "componentId": "dot_matrix_8x8_1784028458950_dhwylm5gv",
+        "pinName": "11",
+        "x": -681.7625347300029,
+        "y": 75.20953175308011
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "12",
+        "x": -129.1460242966574,
+        "y": -101.61730950670636
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [
+        {
+          "x": -690.062797400844,
+          "y": 101.06734035984667
+        }
+      ],
+      "id": "wire-1784108427312",
+      "start": {
+        "componentId": "breadboard_full_1783424629326_lbtkrc0cb",
+        "pinName": "J35",
+        "x": -690.562534730003,
+        "y": 85.20953175308011
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "13",
+        "x": -138.6460242966574,
+        "y": -101.61730950670636
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [
+        {
+          "x": -689.2948369156371,
+          "y": 138.1058367252748
+        }
+      ],
+      "id": "wire-1784108479268",
+      "start": {
+        "componentId": "breadboard_full_1783424629326_lbtkrc0cb",
+        "pinName": "J34",
+        "x": -700.162534730003,
+        "y": 85.20953175308011
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "A3",
+        "x": -27.1460242966574,
+        "y": 80.88269049329364
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [
+        {
+          "x": -710.9225903741857,
+          "y": 160.66706401389732
+        }
+      ],
+      "id": "wire-1784108522278",
+      "start": {
+        "componentId": "breadboard_full_1783424629326_lbtkrc0cb",
+        "pinName": "J33",
+        "x": -709.7625347300029,
+        "y": 85.20953175308011
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "A2",
+        "x": -36.6460242966574,
+        "y": 80.88269049329364
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [
+        {
+          "x": -719.1149781303519,
+          "y": 172.24461423950646
+        }
+      ],
+      "id": "wire-1784108559371",
+      "start": {
+        "componentId": "breadboard_full_1783424629326_lbtkrc0cb",
+        "pinName": "J32",
+        "x": -719.3625347300031,
+        "y": 85.20953175308011
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "A1",
+        "x": -46.1460242966574,
+        "y": 80.88269049329364
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [
+        {
+          "x": -728.8785714217286,
+          "y": 183.95460507171518
+        }
+      ],
+      "id": "wire-1784108596861",
+      "start": {
+        "componentId": "breadboard_full_1783424629326_lbtkrc0cb",
+        "pinName": "J31",
+        "x": -728.962534730003,
+        "y": 85.20953175308011
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "A0",
+        "x": -55.6460242966574,
+        "y": 80.88269049329364
+      },
+      "color": "#22c55e"
+    },
+    {
+      "waypoints": [],
+      "id": "wire-1784108921247",
+      "start": {
+        "componentId": "breadboard_full_1783424629326_lbtkrc0cb",
+        "pinName": "G60",
+        "x": -450.562534730003,
+        "y": 55.209531753080114
+      },
+      "end": {
+        "componentId": "arduino-uno",
+        "pinName": "3",
+        "x": -36.6460242966574,
+        "y": -101.61730950670636
+      },
+      "color": "#22c55e"
+    }
+  ],
+  "activeBoardId": "arduino-uno",
+  "ignoreStock": true
+}
