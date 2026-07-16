@@ -14,6 +14,7 @@
 A Tetris game that you play by tilting the hardware. If you tilt it you can move the blocks left or right.
 
 NOTE: The project says "ESP32" but I hit Ctrl+Z and it deleted everything, then I realised the stuff in the Arduino kit might be a better fit anyways. So can I please get an Arduino kit?
+NOTE2: The 8x8 dot matrix is broken in the editor. I meant to make a Tetris game, but both the tilt sensor and 8x8 dot matrix are broken, so I couldn't finish my project. The wiring is confirmed to work in real life. I just have to finish the firmware up. Nevertheless, I've done as much as I could in the simulator. This has been discussed with @Tanuki
 
 
 ## How It Works
