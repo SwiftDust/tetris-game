@@ -2,7 +2,7 @@
 
 
 
-
+![Tetris game](screenshot.webp)
 
 
 > Built in [Breadboard](https://breadboard.hackclub.com), a Hack Club program. This project took ~6.6 hours of work.
